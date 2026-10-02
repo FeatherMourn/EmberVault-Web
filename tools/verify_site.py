@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def validate() -> None:
-    required_assets = ("index.html", "site.css", "site.js", "embervault-catalog.json")
+    required_assets = ("index.html", "site.css", "site.js", "embervault-catalog.json", "content/community.json")
     missing = [name for name in required_assets if not (ROOT / name).is_file()]
     if missing:
         raise ValueError(f"Missing public site assets: {', '.join(missing)}")

@@ -1,0 +1,8 @@
+{
+  "projects": [
+    {"id": "EV-PROJECT-ARCHITECT", "title": "Architect Companion", "owner_id": "EV-USER-EMBERVAULT", "visibility": "public", "status": "published", "summary": "A shared build-planning and furniture research project.", "linked_records": ["architect-companion", "furniture-clone-registration"]}
+  ],
+  "threads": [
+    {"id": "EV-THREAD-BUILD-1076226", "title": "Build 1076226 compatibility notes", "author_id": "EV-USER-EMBERVAULT", "status": "open", "summary": "Compare verified and experimental routes for the current research build.", "post_count": 1}
+  ]
+}
