@@ -22,6 +22,15 @@ class CommunityServiceTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 service.submit(user["id"], "research", "Hidden")
 
+    def test_moderation_is_role_checked_and_audited(self):
+        with tempfile.TemporaryDirectory() as temp:
+            service = CommunityService(Path(temp)); moderator = service.create_user("Moderator", ["moderator"]); member = service.create_user("Member")
+            thread = service.create_thread(member["id"], "Build notes", "A public note")
+            action = service.moderate(moderator["id"], thread["id"], "lock", "Freeze the thread for review")
+            self.assertEqual(action["action"], "lock")
+            with self.assertRaises(ValueError):
+                service.moderate(member["id"], thread["id"], "restore", "Not authorized")
+
 
 if __name__ == "__main__":
     unittest.main()

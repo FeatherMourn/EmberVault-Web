@@ -53,3 +53,22 @@ class CommunityService:
             raise ValueError("Active author, title, and body are required")
         thread = {"id": f"EV-THREAD-{uuid.uuid4().hex[:8].upper()}", "title": title.strip(), "author_id": author_id, "status": "open", "posts": [{"id": f"EV-POST-{uuid.uuid4().hex[:8].upper()}", "author_id": author_id, "body": body.strip(), "created_at": datetime.now(timezone.utc).isoformat()}]}
         data["threads"].append(thread); self._save(data); return thread
+
+    def moderate(self, moderator_id: str, target_id: str, action: str, reason: str):
+        if action not in {"hide", "lock", "restore", "suspend"} or not reason.strip():
+            raise ValueError("Moderation action and reason are required")
+        data = self._load(); moderator = next((u for u in data["users"] if u["id"] == moderator_id and u["status"] == "active" and ({"moderator", "maintainer"} & set(u["roles"]))), None)
+        if not moderator:
+            raise ValueError("Active moderator is required")
+        target_user = next((u for u in data["users"] if u["id"] == target_id), None)
+        target_thread = next((t for t in data["threads"] if t["id"] == target_id), None)
+        if action == "suspend":
+            if not target_user:
+                raise ValueError("Suspension target must be a user")
+            target_user["status"] = "suspended"
+        elif target_thread:
+            target_thread["status"] = {"hide": "hidden", "lock": "locked", "restore": "open"}[action]
+        else:
+            raise ValueError("Moderation target was not found")
+        record = {"id": f"EV-MOD-{uuid.uuid4().hex[:8].upper()}", "moderator_id": moderator_id, "target_id": target_id, "action": action, "reason": reason.strip(), "created_at": datetime.now(timezone.utc).isoformat()}
+        data["moderation"].append(record); self._save(data); return record
