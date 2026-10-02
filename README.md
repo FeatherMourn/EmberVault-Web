@@ -41,6 +41,8 @@ authenticated workflows.
 
 The server-side community contract is documented in
 `docs/COMMUNITY_PLATFORM.md` and `schemas/community.schema.json`.
+Hosting and the boundary between the static catalog and future community
+service are documented in `docs/DEPLOYMENT.md`.
 
 ## Related repositories
 
