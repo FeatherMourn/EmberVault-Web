@@ -35,6 +35,20 @@ class CommunityServiceTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 service.moderate(member["id"], thread["id"], "restore", "Not authorized")
 
+    def test_forum_replies_and_projects_obey_publication_boundaries(self):
+        with tempfile.TemporaryDirectory() as temp:
+            service = CommunityService(Path(temp)); user = service.create_user("Creator", ["creator"])
+            thread = service.create_thread(user["id"], "Build notes", "Opening post")
+            post = service.reply_thread(user["id"], thread["id"], "Follow-up evidence")
+            self.assertEqual(post["body"], "Follow-up evidence")
+            private = service.create_project(user["id"], "Private work", "private", ["EV-RES-1"])
+            public = service.create_project(user["id"], "Public work", "public", ["EV-KNOW-1"])
+            self.assertEqual(private["status"], "draft")
+            self.assertEqual(public["status"], "review")
+            service.moderate(service.create_user("Mod", ["moderator"])["id"], thread["id"], "lock", "Archive discussion")
+            with self.assertRaises(ValueError):
+                service.reply_thread(user["id"], thread["id"], "Blocked reply")
+
 
 if __name__ == "__main__":
     unittest.main()

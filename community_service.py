@@ -61,6 +61,23 @@ class CommunityService:
         thread = {"id": f"EV-THREAD-{uuid.uuid4().hex[:8].upper()}", "title": title.strip(), "author_id": author_id, "status": "open", "posts": [{"id": f"EV-POST-{uuid.uuid4().hex[:8].upper()}", "author_id": author_id, "body": body.strip(), "created_at": datetime.now(timezone.utc).isoformat()}]}
         data["threads"].append(thread); self._save(data); return thread
 
+    def reply_thread(self, author_id: str, thread_id: str, body: str):
+        data = self._load(); author = next((u for u in data["users"] if u["id"] == author_id and u["status"] == "active"), None)
+        thread = next((t for t in data["threads"] if t["id"] == thread_id), None)
+        if not author or not thread or thread["status"] != "open" or not body.strip():
+            raise ValueError("An active author, open thread, and non-empty body are required")
+        post = {"id": f"EV-POST-{uuid.uuid4().hex[:8].upper()}", "author_id": author_id, "body": body.strip(), "created_at": datetime.now(timezone.utc).isoformat()}
+        thread["posts"].append(post); self._save(data); return post
+
+    def create_project(self, owner_id: str, title: str, visibility: str = "private", linked_records=None):
+        if visibility not in {"private", "unlisted", "public"} or not title.strip():
+            raise ValueError("Project title and visibility are required")
+        data = self._load(); owner = next((u for u in data["users"] if u["id"] == owner_id and u["status"] == "active"), None)
+        if not owner:
+            raise ValueError("Active project owner is required")
+        project = {"id": f"EV-PROJECT-{uuid.uuid4().hex[:8].upper()}", "title": title.strip(), "owner_id": owner_id, "visibility": visibility, "status": "review" if visibility == "public" else "draft", "linked_records": sorted(set(linked_records or []))}
+        data.setdefault("projects", []).append(project); self._save(data); return project
+
     def moderate(self, moderator_id: str, target_id: str, action: str, reason: str):
         if action not in {"hide", "lock", "restore", "suspend"} or not reason.strip():
             raise ValueError("Moderation action and reason are required")
