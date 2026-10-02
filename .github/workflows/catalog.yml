@@ -13,3 +13,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate public catalog snapshot
         run: python tools/verify_catalog.py embervault-catalog.json
+      - name: Verify public site and privacy boundary
+        run: python tools/verify_site.py

@@ -18,6 +18,7 @@ for this repository. Validate an incoming snapshot before review with:
 
 ```text
 python tools/verify_catalog.py embervault-catalog.json
+python tools/verify_site.py
 ```
 
 The public snapshot contract is documented in
