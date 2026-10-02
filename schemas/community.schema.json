@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://embervault.local/contracts/community.schema.json",
+  "title": "EmberVault Community Contracts",
+  "type": "object",
+  "required": ["user", "submission", "forum_thread", "shared_project", "moderation_action"],
+  "properties": {
+    "user": {"type": "object", "required": ["id", "display_name", "roles", "status"], "properties": {"id": {"type": "string", "pattern": "^EV-USER-[A-Z0-9-]+$"}, "display_name": {"type": "string", "minLength": 1}, "roles": {"type": "array", "items": {"enum": ["member", "creator", "researcher", "moderator", "maintainer"]}}, "status": {"enum": ["active", "suspended", "pending"]}}, "additionalProperties": false},
+    "submission": {"type": "object", "required": ["id", "kind", "title", "author_id", "status", "submitted_at"], "properties": {"id": {"type": "string", "pattern": "^EV-SUB-[A-Z0-9-]+$"}, "kind": {"enum": ["mod", "research", "knowledge", "project"]}, "title": {"type": "string", "minLength": 1}, "author_id": {"type": "string"}, "status": {"enum": ["draft", "submitted", "in-review", "changes-requested", "approved", "rejected", "published"]}, "submitted_at": {"type": "string"}, "review_notes": {"type": "string"}}, "additionalProperties": false},
+    "forum_thread": {"type": "object", "required": ["id", "title", "author_id", "status", "posts"], "properties": {"id": {"type": "string", "pattern": "^EV-THREAD-[A-Z0-9-]+$"}, "title": {"type": "string", "minLength": 1}, "author_id": {"type": "string"}, "status": {"enum": ["open", "locked", "archived", "hidden"]}, "posts": {"type": "array", "items": {"type": "object", "required": ["id", "author_id", "body", "created_at"], "properties": {"id": {"type": "string"}, "author_id": {"type": "string"}, "body": {"type": "string", "minLength": 1}, "created_at": {"type": "string"}}, "additionalProperties": false}}}, "additionalProperties": false},
+    "shared_project": {"type": "object", "required": ["id", "title", "owner_id", "visibility", "status"], "properties": {"id": {"type": "string", "pattern": "^EV-PROJECT-[A-Z0-9-]+$"}, "title": {"type": "string", "minLength": 1}, "owner_id": {"type": "string"}, "visibility": {"enum": ["private", "unlisted", "public"]}, "status": {"enum": ["draft", "review", "published", "archived"]}, "linked_records": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": false},
+    "moderation_action": {"type": "object", "required": ["id", "moderator_id", "target_id", "action", "reason", "created_at"], "properties": {"id": {"type": "string", "pattern": "^EV-MOD-[A-Z0-9-]+$"}, "moderator_id": {"type": "string"}, "target_id": {"type": "string"}, "action": {"enum": ["approve", "request-changes", "reject", "hide", "lock", "restore", "suspend"]}, "reason": {"type": "string", "minLength": 1}, "created_at": {"type": "string"}}, "additionalProperties": false}
+  },
+  "additionalProperties": false
+}

@@ -38,6 +38,9 @@ Accounts, moderation, forums, and submission approval require a future
 server-backed service; the static frontend never treats contact links as
 authenticated workflows.
 
+The server-side community contract is documented in
+`docs/COMMUNITY_PLATFORM.md` and `schemas/community.schema.json`.
+
 ## Related repositories
 
 - Runtime and Control Center: https://github.com/FeatherMourn/EnshroudedModHub
