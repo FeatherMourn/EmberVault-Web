@@ -28,6 +28,16 @@ The website should preserve the distinction between verified, experimental,
 research-only, blocked, and unsupported work. A successful offline build or
 runtime registration does not automatically prove visible in-game behavior.
 
+## Preview the public site
+
+The repository includes a dependency-free catalog frontend in `index.html`,
+`site.css`, and `site.js`. Serve this folder with any static host or local
+server; the frontend reads only the reviewed `embervault-catalog.json` file.
+It provides public catalog, research, knowledge, and community entry points.
+Accounts, moderation, forums, and submission approval require a future
+server-backed service; the static frontend never treats contact links as
+authenticated workflows.
+
 ## Related repositories
 
 - Runtime and Control Center: https://github.com/FeatherMourn/EnshroudedModHub
