@@ -43,6 +43,9 @@ The server-side community contract is documented in
 `docs/COMMUNITY_PLATFORM.md` and `schemas/community.schema.json`.
 Hosting and the boundary between the static catalog and future community
 service are documented in `docs/DEPLOYMENT.md`.
+The dependency-free `community_service.py` provides the local development and
+review workflow for users, roles, submissions, projects, forums, publication,
+and moderation; production authentication still belongs behind a server.
 
 ## Related repositories
 
