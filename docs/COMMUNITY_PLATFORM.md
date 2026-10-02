@@ -19,3 +19,7 @@ Publication rules:
 
 The current static frontend presents public catalog and community entry points;
 it does not claim to implement authentication or server-side authorization.
+
+The checked-in `content/community.json` file is a reviewed public snapshot;
+the site verifier rejects projects that are not explicitly public/published and
+threads that are hidden.

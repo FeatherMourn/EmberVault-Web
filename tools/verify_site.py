@@ -19,6 +19,16 @@ def validate() -> None:
     community = json.loads((ROOT / "schemas" / "community.schema.json").read_text(encoding="utf-8"))
     if set(community["properties"]) != {"user", "submission", "forum_thread", "shared_project", "moderation_action"}:
         raise ValueError("Community schema is incomplete")
+    community_data = json.loads((ROOT / "content" / "community.json").read_text(encoding="utf-8"))
+    for project in community_data.get("projects", []):
+        if project.get("visibility") != "public" or project.get("status") != "published":
+            raise ValueError("Unpublished project entered the public community snapshot")
+    for thread in community_data.get("threads", []):
+        if thread.get("status") not in {"open", "locked", "archived"}:
+            raise ValueError("Hidden community thread entered the public snapshot")
+    public_text = json.dumps(community_data)
+    if any(token in public_text for token in ("password", "session_token", "backup_path", "local_path")):
+        raise ValueError("Community snapshot contains private data")
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     if "site.js" not in html or "embervault-catalog.json" not in (ROOT / "site.js").read_text(encoding="utf-8"):
         raise ValueError("Public site is not wired to the reviewed catalog")
