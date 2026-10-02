@@ -47,6 +47,13 @@ class CommunityService:
         submission["status"] = {"approve": "approved", "request-changes": "changes-requested", "reject": "rejected"}[action]
         submission["review_notes"] = notes.strip(); self._save(data); return submission
 
+    def publish_submission(self, publisher_id: str, submission_id: str):
+        data = self._load(); publisher = next((u for u in data["users"] if u["id"] == publisher_id and u["status"] == "active" and ({"moderator", "maintainer"} & set(u["roles"]))), None)
+        submission = next((s for s in data["submissions"] if s["id"] == submission_id), None)
+        if not publisher or not submission or submission["status"] != "approved":
+            raise ValueError("Only an active reviewer can publish an approved submission")
+        submission["status"] = "published"; submission["published_at"] = datetime.now(timezone.utc).isoformat(); self._save(data); return submission
+
     def create_thread(self, author_id: str, title: str, body: str):
         data = self._load(); author = next((u for u in data["users"] if u["id"] == author_id and u["status"] == "active"), None)
         if not author or not title.strip() or not body.strip():

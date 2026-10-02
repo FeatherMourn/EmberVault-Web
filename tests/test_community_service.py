@@ -14,6 +14,10 @@ class CommunityServiceTests(unittest.TestCase):
             self.assertEqual(submission["status"], "submitted")
             approved = service.review(moderator["id"], submission["id"], "approve", "Reviewed public metadata")
             self.assertEqual(approved["status"], "approved")
+            with self.assertRaises(ValueError):
+                service.publish_submission(member["id"], submission["id"])
+            published = service.publish_submission(moderator["id"], submission["id"])
+            self.assertEqual(published["status"], "published")
 
     def test_suspended_user_cannot_submit_or_post(self):
         with tempfile.TemporaryDirectory() as temp:
