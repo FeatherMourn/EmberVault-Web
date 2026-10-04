@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tools.research_publication import load_publication
+from tools.research_publication import load_publication, merge_publication_into_catalog
 
 
 class ResearchPublicationTests(unittest.TestCase):
@@ -30,6 +30,14 @@ class ResearchPublicationTests(unittest.TestCase):
             path.write_text(json.dumps(payload), encoding="utf-8")
             with self.assertRaises(ValueError):
                 load_publication(path)
+
+    def test_merge_replaces_reviewed_records_without_private_fields(self):
+        records = load_publication(Path(__file__).parents[1] / "content/research/mod-research-publication-20261004.json")
+        catalog = {"generated_at": "2026-10-04", "research": [{"id": "old", "title": "Old"}]}
+        merged = merge_publication_into_catalog(catalog, records)
+        self.assertEqual(catalog["research"][0]["id"], "old")
+        self.assertEqual(len(merged["research"]), 5)
+        self.assertNotIn("evidence", merged["research"][-1])
 
 
 if __name__ == "__main__":
