@@ -30,7 +30,10 @@ def validate() -> None:
     if any(token in public_text for token in ("password", "session_token", "backup_path", "local_path")):
         raise ValueError("Community snapshot contains private data")
     html = (ROOT / "index.html").read_text(encoding="utf-8")
-    if "site.js" not in html or "embervault-catalog.json" not in (ROOT / "site.js").read_text(encoding="utf-8"):
+    site_script = (ROOT / "site.js").read_text(encoding="utf-8")
+    external_wiring = "site.js" in html and any(token in site_script for token in ("'embervault-catalog.json'", '"embervault-catalog.json"'))
+    inline_wiring = any(token in html for token in ("fetch('embervault-catalog.json')", 'fetch("embervault-catalog.json")'))
+    if not (external_wiring or inline_wiring):
         raise ValueError("Public site is not wired to the reviewed catalog")
 
 
