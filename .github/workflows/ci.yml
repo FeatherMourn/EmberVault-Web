@@ -16,3 +16,5 @@ jobs:
         run: python tools/verify_site.py
       - name: Verify catalog
         run: python tools/verify_catalog.py embervault-catalog.json
+      - name: Run catalog integration tests
+        run: python -m unittest discover -s tests -q
