@@ -9,7 +9,7 @@ from tools.research_publication import load_publication, merge_publication_into_
 class ResearchPublicationTests(unittest.TestCase):
     def test_imports_mod_research_snapshot(self):
         records = load_publication(Path(__file__).parents[1] / "content/research/mod-research-publication-20261004.json")
-        self.assertEqual(len(records), 4)
+        self.assertEqual(len(records), 11)
         self.assertTrue(all(record["reviewed"] for record in records))
 
     def test_loads_reviewed_sanitized_publication(self):
@@ -36,7 +36,7 @@ class ResearchPublicationTests(unittest.TestCase):
         catalog = {"generated_at": "2026-10-04", "research": [{"id": "old", "title": "Old"}]}
         merged = merge_publication_into_catalog(catalog, records)
         self.assertEqual(catalog["research"][0]["id"], "old")
-        self.assertEqual(len(merged["research"]), 5)
+        self.assertEqual(len(merged["research"]), 12)
         self.assertNotIn("evidence", merged["research"][-1])
 
 

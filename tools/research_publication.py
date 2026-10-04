@@ -28,9 +28,10 @@ def merge_publication_into_catalog(catalog: dict[str, Any], records: list[dict[s
     incoming = {record["id"]: record for record in records}
     existing = {record["id"]: record for record in result["research"]}
     for record_id, record in incoming.items():
+        prior = existing.get(record_id, {})
         existing[record_id] = {
             "id": record_id,
-            "title": record["identity"].get("finding", record["identity"].get("build", record_id)),
+            "title": prior.get("title", record["identity"].get("finding", record["identity"].get("build", record_id))),
             "category": "Research",
             "summary": record["summary"][0] if record["summary"] else "",
             "content": record["summary"][0] if record["summary"] else "",
