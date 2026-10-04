@@ -1,0 +1,23 @@
+name: Research submission
+description: Submit a reproducible public research summary
+title: "Research: "
+body:
+  - type: input
+    id: build
+    attributes:
+      label: Game build
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Hypothesis, evidence, result, and reproduction steps
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy confirmation
+      options:
+        - label: I removed private saves, credentials, personal paths, and unpublished evidence.
+          required: true

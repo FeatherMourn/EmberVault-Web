@@ -3,24 +3,32 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ember Vault · Enshrouded Modding</title>
-  <meta name="description" content="A public catalog and research archive for Enshrouded modding.">
-  <link rel="stylesheet" href="site.css">
+  <title>Ember Vault · Public Catalog</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0e0c14; --panel:#171420; --line:#342c43; --ink:#f0e9f4; --muted:#a69bae; --ember:#ef9253; }
+    * { box-sizing:border-box; } body { margin:0; background:radial-gradient(circle at top,#24192a,var(--bg) 48%); color:var(--ink); font:16px system-ui,sans-serif; }
+    main { max-width:1120px; margin:auto; padding:56px 24px 80px; } .eyebrow { color:var(--ember); letter-spacing:.18em; font-size:.75rem; font-weight:700; }
+    h1 { font:700 clamp(2.8rem,7vw,6rem) Georgia,serif; margin:12px 0; } h2 { font:700 1.5rem Georgia,serif; } p { color:var(--muted); line-height:1.6; }
+    .intro { max-width:720px; font-size:1.1rem; } .notice { border:1px solid var(--line); background:#171420aa; padding:16px 18px; border-radius:10px; color:var(--muted); }
+    .toolbar { display:flex; gap:12px; flex-wrap:wrap; margin:32px 0 20px; } input,select { background:var(--panel); border:1px solid var(--line); color:var(--ink); padding:12px; border-radius:7px; }
+    input { flex:1; min-width:220px; } .tabs button { background:transparent; border:1px solid var(--line); color:var(--muted); padding:10px 14px; border-radius:7px; cursor:pointer; } .tabs button.active { background:var(--ember); color:#201318; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; } .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:18px; } .card h3 { margin:0 0 8px; } .meta { color:var(--ember); font-size:.8rem; } footer { margin-top:56px; border-top:1px solid var(--line); padding-top:18px; color:var(--muted); font-size:.85rem; }
+    .card { cursor:pointer; } .card:hover { border-color:var(--ember); transform:translateY(-1px); } dialog { max-width:680px; width:calc(100% - 32px); background:var(--panel); color:var(--ink); border:1px solid var(--line); border-radius:12px; padding:24px; } dialog::backdrop { background:#000b; } dialog button { background:var(--ember); border:0; border-radius:6px; padding:10px 16px; cursor:pointer; }
+  </style>
 </head>
-<body>
-  <header class="masthead">
-    <a class="brand" href="#top"><span class="sigil">EV</span><span>Ember Vault<small>modding archive &amp; community</small></span></a>
-    <nav><a href="#mods">Mods</a><a href="#research">Research</a><a href="#knowledge">Knowledge</a><a href="#community">Community</a></nav>
-  </header>
-  <main id="top">
-    <section class="hero"><p class="eyebrow">THE PUBLIC ARCHIVE</p><h1>Build carefully.<br><em>Document everything.</em></h1><p class="lede">A dark-fantasy catalog for Enshrouded mods, experiments, compatibility notes, and the people who make them.</p><div class="hero-actions"><a class="button" href="#mods">Enter the catalog</a><a class="quiet" href="#research">Read the archive ↓</a></div></section>
-    <section class="stats" id="stats"></section>
-    <section class="section" id="mods"><div class="section-heading"><div><p class="eyebrow">PUBLIC CATALOG</p><h2>Mods &amp; packages</h2></div><input id="search" type="search" placeholder="Search the vault…" aria-label="Search catalog"></div><div id="mod-grid" class="card-grid"></div></section>
-    <section class="split section" id="research"><div><p class="eyebrow">FIELD NOTES</p><h2>Research archive</h2><p class="muted">Evidence is separated from speculation. Every record keeps its build context and publication state visible.</p></div><div id="research-list" class="record-list"></div></section>
-    <section class="section" id="knowledge"><div class="section-heading"><div><p class="eyebrow">THE LIBRARY</p><h2>Knowledge base</h2></div></div><div id="knowledge-grid" class="knowledge-grid"></div></section>
-    <section class="community section" id="community"><p class="eyebrow">THE GATHERING HALL</p><h2>Shared work belongs in the open.</h2><div id="community-grid" class="community-grid"></div></section>
-  </main>
-  <footer><span>EMBER VAULT · PUBLIC KNOWLEDGE, CAREFULLY KEPT</span><span>Catalog contract v1 · Private evidence stays private</span></footer>
-  <script src="site.js"></script>
-</body>
-</html>
+<body><main>
+  <div class="eyebrow">EMBER VAULT · PUBLIC CATALOG</div>
+  <h1>Knowledge for the ember-lit edge.</h1>
+  <p class="intro">A curated catalog for Enshrouded modding, research, compatibility, and design. Public records are sanitized snapshots; private saves, logs, and experimental evidence remain in the Control Center.</p>
+  <div class="notice" id="status">Loading the latest public snapshot…</div>
+  <div class="toolbar"><input id="search" placeholder="Search the vault…"><div class="tabs" id="tabs"></div></div>
+  <section><h2 id="heading">Modules</h2><div class="grid" id="cards"></div></section>
+  <footer>Public catalog contract v1 · Experimental and research-only records are labeled. Always verify game build and recovery requirements before installing anything.</footer>
+</main><dialog id="detail"><button onclick="$('detail').close()">Close</button><div id="detailBody"></div></dialog><script>
+const groups={modules:['Modules','publisher','feature_state'],packages:['Packages','author','package_type'],research:['Research','status','promotion_status'],knowledge:['Knowledge','category','version'],content_projects:['Content projects','status','published_at']};
+let catalog={}, active='modules'; const $=id=>document.getElementById(id);
+function draw(){const [title]=groups[active]||['Catalog']; $('heading').textContent=title; const q=$('search').value.toLowerCase(); const items=(catalog[active]||[]).filter(x=>JSON.stringify(x).toLowerCase().includes(q)); $('cards').innerHTML=items.length?items.map((x,i)=>`<article class="card" data-record="${i}"><div class="meta">${x.feature_state||x.status||x.category||x.package_type||'PUBLIC'}</div><h3>${x.name||x.title||x.id}</h3><p>${x.description||x.hypothesis||x.summary||x.published_at||'Public catalog record.'}</p><div class="meta">${x.version?'v'+x.version:''} ${x.process_mode?'· '+x.process_mode:''}</div></article>`).join(''):'<p>No public records match this search.</p>'; document.querySelectorAll('[data-record]').forEach(card=>card.onclick=()=>show(items[Number(card.dataset.record)]));}
+function show(item){$('detailBody').innerHTML=`<div class="eyebrow">PUBLIC RECORD · ${active}</div><h2>${item.name||item.title||item.id}</h2><p>${item.description||item.hypothesis||item.summary||'Public catalog record.'}</p><pre style="white-space:pre-wrap;color:var(--muted);font:inherit">${Object.entries(item).map(([k,v])=>`${k}: ${Array.isArray(v)?v.join(', '):typeof v==='object'?JSON.stringify(v):v}`).join('\n')}</pre>`; $('detail').showModal();}
+function tabs(){ $('tabs').innerHTML=Object.entries(groups).map(([key,[title]])=>`<button class="${key===active?'active':''}" data-key="${key}">${title}</button>`).join(''); document.querySelectorAll('[data-key]').forEach(b=>b.onclick=()=>{active=b.dataset.key;tabs();draw();}); }
+$('search').oninput=draw; fetch('embervault-catalog.json').then(r=>r.json()).then(data=>{catalog=data; $('status').textContent=`Public snapshot · generated ${data.generated_at} · ${data.modules.length} modules · ${data.packages.length} packages · ${data.research.length} research records`; tabs(); draw();}).catch(()=>{$('status').textContent='The public snapshot could not be loaded.'; tabs(); draw();});
+</script></body></html>

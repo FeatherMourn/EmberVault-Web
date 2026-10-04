@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 def validate(payload: dict) -> None:
-    required = ("generated_at", "contract_versions", "packages", "modules", "knowledge", "research", "content_projects")
+    required = ("generated_at", "contract_versions", "packages", "modules", "tuning_adapters", "knowledge", "research", "content_projects", "promotions")
     if not isinstance(payload, dict) or payload.get("schema_version") != 1:
         raise ValueError("Catalog schema_version must be 1")
     if set(payload) != {"schema_version", *required}:
@@ -15,12 +15,12 @@ def validate(payload: dict) -> None:
     if not isinstance(payload["generated_at"], str) or not payload["generated_at"].strip():
         raise ValueError("Catalog generated_at is required")
     versions = payload["contract_versions"]
-    expected_versions = ("module_manifest", "package_manifest", "research_record", "content_project", "tuning_adapter")
+    expected_versions = ("module_manifest", "package_manifest", "research_record", "content_project", "tuning_adapter", "integration_context")
     if not isinstance(versions, dict) or set(versions) != set(expected_versions):
         raise ValueError("Catalog contract_versions are incomplete")
     if any(not isinstance(versions[key], int) or isinstance(versions[key], bool) or versions[key] < 1 for key in expected_versions):
         raise ValueError("Catalog contract_versions contain an invalid value")
-    for name in ("packages", "modules", "knowledge", "research", "content_projects"):
+    for name in ("packages", "modules", "tuning_adapters", "knowledge", "research", "content_projects", "promotions"):
         if not isinstance(payload[name], list):
             raise ValueError(f"Catalog collection is not an array: {name}")
     for item in payload["modules"]:

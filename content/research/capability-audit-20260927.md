@@ -9,3 +9,8 @@ The audit separates verified, experimental, research-only, and unsupported capab
 ## Publishing rule
 
 A capability should move toward stable status only after its runtime boundary, current-build compatibility, and relevant in-game behavior are independently documented.
+# Build: 1076226
+# Hypothesis
+
+# Evidence
+

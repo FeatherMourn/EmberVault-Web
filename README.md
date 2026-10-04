@@ -18,7 +18,7 @@ for this repository. Validate an incoming snapshot before review with:
 
 ```text
 python tools/verify_catalog.py embervault-catalog.json
-python tools/verify_site.py
+python tools/verify_submissions.py
 ```
 
 The public snapshot contract is documented in
@@ -29,23 +29,17 @@ The website should preserve the distinction between verified, experimental,
 research-only, blocked, and unsupported work. A successful offline build or
 runtime registration does not automatically prove visible in-game behavior.
 
-## Preview the public site
+Contribution and research-submission rules are documented in
+[`CONTRIBUTING.md`](CONTRIBUTING.md). Public records require review and must
+not contain private workspace data.
 
-The repository includes a dependency-free catalog frontend in `index.html`,
-`site.css`, and `site.js`. Serve this folder with any static host or local
-server; the frontend reads only the reviewed `embervault-catalog.json` file.
-It provides public catalog, research, knowledge, and community entry points.
-Accounts, moderation, forums, and submission approval require a future
-server-backed service; the static frontend never treats contact links as
-authenticated workflows.
+The repository includes a dependency-free static catalog at `index.html`. It
+reads only the sanitized `embervault-catalog.json` snapshot and never exposes
+private profiles, save backups, logs, or unpublished research evidence.
 
-The server-side community contract is documented in
-`docs/COMMUNITY_PLATFORM.md` and `schemas/community.schema.json`.
-Hosting and the boundary between the static catalog and future community
-service are documented in `docs/DEPLOYMENT.md`.
-The dependency-free `community_service.py` provides the local development and
-review workflow for users, roles, submissions, projects, forums, publication,
-and moderation; production authentication still belongs behind a server.
+The included Pages workflow validates the catalog and public submissions before
+deploying the static catalog. Enable GitHub Pages with **GitHub Actions** as
+the source in the repository settings; no external hosting service is needed.
 
 ## Related repositories
 

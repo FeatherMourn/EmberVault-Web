@@ -1,0 +1,23 @@
+name: Mod catalog record
+description: Propose a public mod or package record
+title: "Mod record: "
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Mod name and version
+    validations:
+      required: true
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Tested builds, description, and compatibility notes
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy confirmation
+      options:
+        - label: This submission contains no private saves, credentials, or personal filesystem paths.
+          required: true
