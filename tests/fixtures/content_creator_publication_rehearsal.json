@@ -1,0 +1,19 @@
+{
+  "id": "cc-offline-publication-rehearsal",
+  "name": "Offline Publication Rehearsal",
+  "title": "Offline Publication Rehearsal",
+  "record_type": "content-blueprint",
+  "record_version": 1,
+  "category": "bed",
+  "workflow_mode": "donor-preserving-clone",
+  "status": "reviewed",
+  "evidence_state": "reviewed",
+  "review_issues": [],
+  "preview_hash": "offline-rehearsal-preview",
+  "compatibility": {
+    "game_build": "1076226",
+    "blender_version": "offline-fixture"
+  },
+  "application_state": "design-only",
+  "live_game_files_touched": false
+}

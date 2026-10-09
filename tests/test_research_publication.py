@@ -7,6 +7,13 @@ from tools.research_publication import load_publication, merge_publication_into_
 
 
 class ResearchPublicationTests(unittest.TestCase):
+    def test_content_creator_rehearsal_fixture_is_not_public_catalog_content(self):
+        fixture = json.loads((Path(__file__).parents[1] / "tests" / "fixtures" / "content_creator_publication_rehearsal.json").read_text(encoding="utf-8"))
+        catalog = json.loads((Path(__file__).parents[1] / "embervault-catalog.json").read_text(encoding="utf-8"))
+        self.assertEqual(catalog["content_projects"], [])
+        self.assertEqual(fixture["application_state"], "design-only")
+        self.assertFalse(fixture["live_game_files_touched"])
+
     def test_imports_mod_research_snapshot(self):
         records = load_publication(Path(__file__).parents[1] / "content/research/mod-research-publication-20261004.json")
         self.assertEqual(len(records), 11)
