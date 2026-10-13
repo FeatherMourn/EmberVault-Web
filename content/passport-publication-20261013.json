@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "publication": "mod-package-passport-review",
+  "public": false,
+  "records": [
+    {
+      "id": "sf.example",
+      "version": "1.6.6",
+      "builds": ["1076226"],
+      "targets": ["client", "dedicated-server"],
+      "dependencies": [],
+      "settings_schema": "extended.mod.json",
+      "compatibility_state": "review-required",
+      "runtime_behavior": "unverified",
+      "limitations": ["Runtime behavior is not independently verified."],
+      "backup_required": true,
+      "reviewed": false,
+      "public": false
+    }
+  ]
+}
