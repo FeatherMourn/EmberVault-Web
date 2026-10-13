@@ -470,6 +470,31 @@
       "version": 1
     }
   ],
-  "content_projects": [],
+  "content_projects": [
+    {
+      "id": "external.shroudforge.passport.1.6.6",
+      "title": "ShroudForge Mod Package Passport",
+      "name": "ShroudForge Mod Package Passport",
+      "record_type": "mod-package-passport",
+      "record_version": 1,
+      "category": "compatibility-reference",
+      "status": "reviewed-external-reference",
+      "evidence_state": "external-documentation",
+      "review_issues": ["Runtime behavior remains unverified."],
+      "compatibility": {
+        "builds": ["1076226"],
+        "targets": ["client", "dedicated-server"],
+        "state": "review-required"
+      },
+      "dependencies": [],
+      "settings_schema": "extended.mod.json",
+      "runtime_behavior": "unverified",
+      "backup_required": true,
+      "application_state": "design-only",
+      "live_game_files_touched": false,
+      "reviewed": true,
+      "public": true
+    }
+  ],
   "promotions": []
 }

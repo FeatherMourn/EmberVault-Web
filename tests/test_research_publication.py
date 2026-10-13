@@ -7,10 +7,15 @@ from tools.research_publication import load_publication, merge_publication_into_
 
 
 class ResearchPublicationTests(unittest.TestCase):
-    def test_content_creator_rehearsal_fixture_is_not_public_catalog_content(self):
+    def test_sanitized_passport_is_public_without_private_content(self):
         fixture = json.loads((Path(__file__).parents[1] / "tests" / "fixtures" / "content_creator_publication_rehearsal.json").read_text(encoding="utf-8"))
         catalog = json.loads((Path(__file__).parents[1] / "embervault-catalog.json").read_text(encoding="utf-8"))
-        self.assertEqual(catalog["content_projects"], [])
+        passport = next(item for item in catalog["content_projects"] if item["id"] == "external.shroudforge.passport.1.6.6")
+        self.assertTrue(passport["reviewed"])
+        self.assertTrue(passport["public"])
+        self.assertNotIn("files", passport)
+        self.assertNotIn("evidence", passport)
+        self.assertNotIn("source_path", passport)
         self.assertEqual(fixture["application_state"], "design-only")
         self.assertFalse(fixture["live_game_files_touched"])
 
