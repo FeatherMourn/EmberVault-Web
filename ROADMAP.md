@@ -13,11 +13,22 @@ rendering, sanitized imports, blueprint sharing, and upload intake.
 Excluded: private profiles, save data, credentials, direct desktop control,
 automatic installation, and execution of uploaded content.
 
+## Current integration status — 2026-10-13
+
+The Mod Package Passport review export is implemented and validated. It carries
+sanitized identity, version, build targets, dependencies, settings metadata,
+compatibility state, runtime limitations, and backup requirements. Private
+file hashes, evidence paths, approval history, and runtime approval are not
+published. The current Passport record remains an internal review fixture and
+has not been added to the public catalog.
+
 ## Milestones
 
 1. Align public schemas with shared Contracts.
 2. Validate incoming sanitized snapshots and preserve capability states.
 3. Add reviewed project and research publication workflows.
+   - [x] Validate sanitized Mod Package Passport review exports.
+   - [ ] Publish a Passport only after explicit review and publication approval.
 4. Add a community blueprint and content library with previews, tags,
    authorship, licenses, compatibility, evidence state, and version history.
 5. Add upload intake for blueprints, editable projects, preview images,
